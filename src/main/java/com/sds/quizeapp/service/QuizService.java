@@ -2,16 +2,21 @@ package com.sds.quizeapp.service;
 
 import com.sds.quizeapp.controller.QuestionController;
 import com.sds.quizeapp.dto.QuestionDto;
+import com.sds.quizeapp.dto.Response;
 import com.sds.quizeapp.entity.Question;
 import com.sds.quizeapp.entity.Quiz;
 import com.sds.quizeapp.repository.QuestionDao;
 import com.sds.quizeapp.repository.QuizDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
@@ -47,5 +52,17 @@ public class QuizService {
             });
         }
         return questions;
+    }
+
+    public Integer calculateScore(int id, List<Response> responses) {
+        Quiz quiz = quizDao.findById(id).orElse(null);
+        Map<Integer, Question> questionMap = quiz.getQuestions().stream().collect(Collectors.toMap(Question::getId, question -> question));
+        int res = 0;
+        for (Response response : responses) {
+            if (questionMap.get(response.getId()).getAnswer().equals(response.getResponse())) {
+                res++;
+            }
+        }
+        return res;
     }
 }

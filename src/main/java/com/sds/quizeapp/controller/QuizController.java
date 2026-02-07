@@ -1,7 +1,7 @@
 package com.sds.quizeapp.controller;
 
 import com.sds.quizeapp.dto.QuestionDto;
-import com.sds.quizeapp.entity.Quiz;
+import com.sds.quizeapp.dto.Response;
 import com.sds.quizeapp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,5 +28,10 @@ public class QuizController {
     @GetMapping("questions/{id}")
     public ResponseEntity<List<QuestionDto>> getQuizQuestions(@PathVariable int id) {
         return new ResponseEntity<>(quizService.getQuizQuestionsById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("submit/{id}")
+    public ResponseEntity<Integer> submitQuiz(@PathVariable int id, @RequestBody List<Response> responses) {
+        return new ResponseEntity<>(quizService.calculateScore(id, responses), HttpStatus.OK);
     }
 }
