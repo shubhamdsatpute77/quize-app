@@ -25,8 +25,8 @@ public class QuizController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<List<QuestionDto>> getQuize(@PathVariable int id) {
+    @GetMapping("questions/{id}")
+    public ResponseEntity<List<QuestionDto>> getQuizQuestions(@PathVariable int id) {
         return new ResponseEntity<>(quizService.getQuizQuestionsById(id), HttpStatus.OK);
     }
 }
